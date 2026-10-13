@@ -1,47 +1,80 @@
-import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import * as THREE from 'three'
+import { OrbitControls } from 'three/examples/jsm/Addons.js';
 
-const scene = new THREE.Scene();
+const scene = new THREE.Scene()
 const camera = new THREE.PerspectiveCamera(
-    75, 
-    window.innerWidth / window.innerHeight, 
-    0.1, 
-    1000
-);
-
-camera.position.set(6, 5, 8);
+    75,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    100
+)
+camera.position.set(5, 6, 7)
 const renderer = new THREE.WebGLRenderer();
-renderer.setSize(innerWidth, innerHeight);
-document.body.appendChild(renderer.domElement);
+renderer.setSize(window.innerWidth, window.innerHeight)
+document.body.appendChild(renderer.domElement)
+const pointLight = new THREE.PointLight(0xffffff, 400, 0, 1.6)
+const ambientLight = new THREE.AmbientLight(0xffffff, 2.3)
+scene.add(pointLight, ambientLight)
 
-const pointLight = new THREE.PointLight(0xffffff, 400, 0, 1.6);
-
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.15);
-scene.add(pointLight, ambientLight);
-
-//dielli
 const geometry = new THREE.SphereGeometry(2, 32, 24);
-const material = new THREE.MeshStandardMaterial({ color: 0xff7700 });
-const sun = new THREE.Mesh(geometry, material);
-scene.add(sun);
+const material = new THREE.MeshStandardMaterial({ color: 0x75c518, emissive: 0xe8431c , emissiveIntensity: 0.6 })
+const sun = new THREE.Mesh(geometry, material)
+scene.add(sun)
 
-const orbitToke = new THREE.Object3D();
-sun.add(orbitToke);
+const earthOrbit = new THREE.Object3D();
+sun.add(earthOrbit)
 
-//toka
-const toka = new THREE.Mesh(
+const earth = new THREE.Mesh(
     new THREE.SphereGeometry(0.8, 32, 24),
-    new THREE.MeshStandardMaterial({ color: 0x1e40ff, roughness: 0.6 })
-);
-toka.position.x = 6;
-orbitToke.add(toka);
+    new THREE.MeshStandardMaterial({ color: 0X1E40FF, roughness: 0.9 })
+)
+earth.position.x = 6
+earthOrbit.add(earth)
+
+const marsOrbit = new THREE.Object3D();
+sun.add(marsOrbit)
+
+const mars = new THREE.Mesh(
+    new THREE.SphereGeometry(0.8, 32, 24),
+    new THREE.MeshStandardMaterial({ color: 0xFF0000, roughness: 0.9 })
+)
+mars.position.x = 7
+marsOrbit.add(mars)
+
+const phobosOrbit = new THREE.Object3D();
+mars.add(phobosOrbit)
+
+const phobos = new THREE.Mesh(
+    new THREE.SphereGeometry(0.28, 32, 24),
+    new THREE.MeshStandardMaterial({ color: 0xA9A9A9, roughness: 0.8 })
+)
+phobos.position.x = 1.8
+phobosOrbit.add(phobos)
+
+const moonOrbit = new THREE.Object3D();
+earth.add(moonOrbit)
+//earth.add(new THREE.AxesHelper(7))
+
+const moon = new THREE.Mesh(
+    new THREE.SphereGeometry(0.28, 32, 24),
+    new THREE.MeshStandardMaterial({ color: 0xcfd3d8, roughness: 0.8 })
+)
+moon.position.x = 1.8
+moonOrbit.add(moon)
 
 const control = new OrbitControls(camera, renderer.domElement);
-
 function animate() {
-    requestAnimationFrame(animate);
-    control.update();
-    orbitToke.rotation.y += 0.01;
-    renderer.render(scene, camera);
+    requestAnimationFrame(animate)
+    control.update()
+    earthOrbit.rotation.y += 0.01
+    moonOrbit.rotation.y += 0.04
+    marsOrbit.rotation.y += 0.02
+    phobosOrbit.rotation.y += 0.05
+
+    earth.rotation.y += 0.05
+    mars.rotation.y += 0.03
+
+    sun.rotation.y += 0.003
+    renderer.render(scene, camera)
 }
-animate();
+animate()
